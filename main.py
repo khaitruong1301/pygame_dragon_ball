@@ -15,7 +15,7 @@ width_title = text_title.get_rect()
 #load dragon
 x_goku,y_goku = 50,50
 
-image_goku = pygame.transform.scale(pygame.image.load("goku.png","goku"),(50,50))
+image_goku = pygame.transform.scale(pygame.image.load("goku.png","goku"),(100,100))
 goku = pygame.Rect(x_goku,y_goku,image_goku.get_width(),image_goku.get_height())
 # dragon = pygame.Rect()
 
@@ -29,7 +29,7 @@ gem = pygame.Rect(x_gem,y_gem,image_gem.get_width(),image_gem.get_height())
 distance = 100
 
 #setup time 
-random_interval = 10000 #10 giây
+random_interval = 1000 #10 giây
 #thời gian bắt đầu lặp
 last_time = pygame.time.get_ticks()
 
@@ -39,11 +39,19 @@ score_font = pygame.font.Font(None,32)
 score_text = score_font.render(f"""Score: {score}""",True,"Red","Pink")
 score_x,score_y = 1000 - score_text.get_width(), 10
 
+#Âm thanh 
+gem_sound = pygame.mixer.Sound("coin_sound.wav")
+sound_track = pygame.mixer.Sound("sound_track.wav")
+sound_track.play(-1)
+
+
+
 
 
 # Background
 while True:
-    WINDOW.fill("White")
+    # WINDOW.fill("White")
+    WINDOW.blit(pygame.transform.scale(pygame.image.load("bg.jpeg"),(1024,720)),(0,0))
     
 
     for event in pygame.event.get():
@@ -64,6 +72,7 @@ while True:
           
 
             if goku.colliderect(gem):
+                    gem_sound.play()
                     score += 10
                     score_text = score_font.render(f'''Score: {score}''',True,"Red","Pink")
                     #tăng điểm sau đó random vị trí
@@ -76,21 +85,23 @@ while True:
 
     WINDOW.blit(text_title,((1024 - text_title.get_width())//2,10))
     WINDOW.blit(score_text,(score_x,score_y))
+    
     if ((current_time - last_time) % random_interval == 0): 
         x_gem,y_gem = random.randint(10,1024), random.randint(10,720)
 
     goku = pygame.Rect(x_goku,y_goku,image_goku.get_width(),image_goku.get_height())
     gem = pygame.Rect(x_gem,y_gem,image_gem.get_width(),image_gem.get_height())
+    
     if (current_time // 500 % 2) == 0: 
         WINDOW.blit(image_gem,(x_gem,y_gem))
-    
     WINDOW.blit(image_goku,(x_goku,y_goku))
+    WINDOW.blit(text,(10,700))
+    
 
 
  
 
     # WINDOW.blit(text,(500,500))
-
     pygame.display.update()
 
         
